@@ -1,38 +1,80 @@
+/* App全体のスタイル */
 .App {
+  font-family: Arial, sans-serif;
   text-align: center;
+  margin-top: 50px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* container: ホロスコープとフォームの配置 */
+.container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: flex-start;
+}
+
+/* ホロスコープの画像を左に配置 */
+.horoscope {
+  margin-right: 50px;
+}
+
+/* ホロスコープ画像のサイズ調整 */
+.horoscope img {
+  width: 300px;
+  height: 300px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+}
+
+/* フォームのスタイル */
+.form-container {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* テーブルのスタイル */
+table {
+  width: 100%;
+  margin: 10px 0;
+}
+
+/* ラベルのスタイル */
+label {
+  font-weight: bold;
+}
+
+/* 入力フィールドのスタイル */
+input[type="text"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+/* 送信ボタンのスタイル */
+button {
+  background-color: #4CAF50;
   color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
-.App-link {
-  color: #61dafb;
+/* ボタンにホバーした時のスタイル */
+button:hover {
+  background-color: #45a049;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* メッセージのスタイル */
+#message {
+  margin-top: 20px;
+  font-size: 18px;
 }
