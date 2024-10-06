@@ -23,10 +23,10 @@ function Search() {
     let birthdate ='';
 
     if (name.trim() === "" || selectedYear === "" || selectedMonth === "" || selectedDay === "" || selectedPlanet === "") {
-      setMessage("名前、生年月日、星座，惑星をすべて入力してください。");  // すべてのフィールドが必要
+      setMessage("Please enter your name, date of birth, zodiac sign, and planet.");  // すべてのフィールドが必要
     } else {
       birthdate = `${selectedYear}-${selectedMonth}-${selectedDay}`;  // 生年月日を生成
-      setMessage(`こんにちは、${name}さん！あなたの生年月日は ${birthdate}、選択した惑星は ${selectedPlanet} ですね。`);
+      setMessage(`Hello, ${name}！Your date of birth is ${birthdate}、and your selected planet is  ${selectedPlanet} .`);
     }
 
     setName('');  // フォームのリセット
@@ -38,20 +38,24 @@ function Search() {
 
     console.log(name, birthdate, selectedPlanet);
 
-    // fetch(`https://2dkhkhbteycxfeou56oxyjhyty0yuvkx.lambda-url.us-east-2.on.aws?name=${name}&birthday=${birthdate}&starsytem=${selectedPlanet}`)  // APIのURLを指定
-    // .then(response => response.json())  // レスポンスをJSON形式に変換
-    // .then(data => {
-    // })
-    // .catch(error => {
-    //   console.error('エラーが発生しました:', error);  // エラー処理
-    // });
+    fetch('/demo.json')
+    //  fetch(`https://ppf6j3b4z2.execute-api.us-east-2.amazonaws.com/v1/test?name=${name}&birthday=${birthdate}&starsytem=${selectedPlanet}`)  // APIのURLを指定
+     .then(response => response.json())  // レスポンスをJSON形式に変換
+     .then(data => {
 
-    const queryString = new URLSearchParams({
-      selectedStarSystem,
-      selectedPlanet
-    }).toString();
+      const queryString = new URLSearchParams({
+        selectedStarSystem,
+        selectedPlanet,
+        description: data.description,
+        result: JSON.stringify(data.result)
+      }).toString();
 
-    navigate('/result?' + queryString);
+      navigate('/result?' + queryString);
+     })
+     .catch(error => {
+       console.error('error:', error);  // エラー処理
+     });
+
   };
 
 
@@ -76,7 +80,7 @@ function Search() {
               <tbody>
                 <tr>
                   <td>
-                    <label htmlFor="name">名前:</label>
+                    <label htmlFor="name">Name:</label>
                   </td>
                   <td>
                     <input
@@ -84,30 +88,30 @@ function Search() {
                       id="name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}  // 名前の入力を管理
-                      placeholder="名前を入力してください"
+                      placeholder="Please enter your name."
                     />
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <label htmlFor="birthdate">生年月日:</label>
+                    <label htmlFor="birthdate">Date of Birth:</label>
                   </td>
                   <td>
                     {/* 年、月、日を選択するためのドロップダウン */}
                     <select id="birthdate-year" value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
-                      <option value="">年</option>
+                      <option value="">Year</option>
                       {Array.from({ length: 100 }, (_, i) => (
                         <option key={i} value={2023 - i}>{2023 - i}</option>
                       ))}
                     </select>
                     <select id="birthdate-month" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
-                      <option value="">月</option>
+                      <option value="">Month</option>
                       {Array.from({ length: 12 }, (_, i) => (
                         <option key={i} value={String(i + 1).padStart(2, '0')}>{i + 1}</option>
                       ))}
                     </select>
                     <select id="birthdate-day" value={selectedDay} onChange={(e) => setSelectedDay(e.target.value)}>
-                      <option value="">日</option>
+                      <option value="">Day</option>
                       {Array.from({ length: 31 }, (_, i) => (
                         <option key={i} value={String(i + 1).padStart(2, '0')}>{i + 1}</option>
                       ))}
@@ -116,7 +120,7 @@ function Search() {
                 </tr>
                 <tr>
                   <td>
-                  <label htmlFor="star-system">星系:</label>
+                  <label htmlFor="star-system">Star System:</label>
                   </td>
                   <td>
                     <select
@@ -124,15 +128,15 @@ function Search() {
                       value={selectedStarSystem}
                       onChange={handleStarSystemChange}  // 星系の選択を管理
                     >
-                      <option value="">星系を選んでください</option>
-                      <option value="trappist1">トラピスト1</option>
-                      <option value="sun">太陽</option>
+                      <option value="">Please select a star system.</option>
+                      <option value="trappist1">TRAPPIST-1</option>
+                      <option value="sun">Sun</option>
                     </select>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <label htmlFor="planet">惑星:</label>
+                    <label htmlFor="planet">Planet:</label>
                   </td>
                   <td>
                     <select
@@ -140,7 +144,7 @@ function Search() {
                       value={selectedPlanet}
                       onChange={(e) => setSelectedPlanet(e.target.value)}  // 惑星の選択を管理
                     >
-                      <option value="">惑星を選んでください</option>
+                      <option value="">Please select a planet.</option>
                       {selectedStarSystem === "trappist1" && (
                         <>
                           <option value="0">TRAPPIST-1b</option>
