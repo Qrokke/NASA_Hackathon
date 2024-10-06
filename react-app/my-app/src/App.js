@@ -22,15 +22,15 @@ const trappist1Images = [
   {src:require('./images/trappist1/trappist1e.png'), alt: 'trappist1e'},
   {src:require('./images/trappist1/trappist1f.png'), alt: 'trappist1f'},
   {src:require('./images/trappist1/trappist1g.png'), alt: 'trappist1g'},
-  {src:require('./images/trappist1/trappist1h.png'), alt: 'trappist1h'},
 ];
 
 const setSunPostion = (mode, realSunX, realSunY) => {
-  const sunRadians = Math.atan2(realSunX, realSunY) * (180 / Math.PI);
-  const sunRadius = initialPosition + 17 * (mode+1);
-  const sunX = sunRadius * Math.cos(sunRadians * (Math.PI / 180));
-  const sunY = sunRadius * Math.sin(sunRadians * (Math.PI / 180));
-  return {top: sunY, left: sunX};
+  const sunRadians = Math.atan2(realSunX, realSunY);
+  const sunRadius = initialPosition + 17 * (2);
+  const sunX = sunRadius * Math.cos(sunRadians);
+  const sunY = sunRadius * Math.sin(sunRadians);
+
+  return {radians: sunRadians, top: `calc(50% + ${sunY}px)`, left: `calc(50% + ${sunX}px)`, transform: 'translate(-50%, -50%)'};
 }
 
 const setImagesList = (mode) => {
@@ -42,18 +42,18 @@ const setImagesList = (mode) => {
 }
 
 const setPlanetsPosition = (mode, sunAnguler,angulerList) => {
-  const centerPlanetIndex = mode + 1;
+  const centerPlanetIndex = 2;
   return angulerList.map((anguler, index) => {
     const planetRadius = initialPosition + 17 * index;
 
     if(index === centerPlanetIndex) {
       return {top:'50%', left: '50%', transform: `translate(-50%, -50%)`};
     }
-    else{//rotate(${anguler + sunAnguler}deg)
+    else{
       const totalAnguler = anguler + sunAnguler;
-      const radians = (totalAnguler * Math.PI) / 180;
-      const x = planetRadius * Math.cos(radians);
-      const y = planetRadius * Math.sin(radians);
+      const sunRadians = (totalAnguler * Math.PI) / 180;
+      const x = planetRadius * Math.cos(sunRadians);
+      const y = planetRadius * Math.sin(sunRadians);
 
       return {top:`calc(50% + ${y}px)`, left:`calc(50% + ${x}px)`, transform: `translate(-50%, -50%)`};
     }
@@ -61,24 +61,36 @@ const setPlanetsPosition = (mode, sunAnguler,angulerList) => {
 };
 
 function App() {
-  const mode = 1;
+  const mode = 2;
   const horoscopeSize = {width: '300px', height:'300px'};
-  const sunPosition = setSunPostion(mode,'150', '204');
-  const sunAnguler = 0;
+  const sunPosition = setSunPostion(mode,'0', '54');
+  const sunRadians  = sunPosition.radians;
   const imagesList = setImagesList(mode);
-  const planetsPosition = setPlanetsPosition(mode, sunAnguler,[0, 45, 90, 135, 180, 225]);
+  const planetsPosition = setPlanetsPosition(mode, sunRadians,[0, 45, 90, 135, 180, 225]);
 
   return (
     <div style={{position:'relative', width:horoscopeSize.width, height:horoscopeSize.height, top: '100px', left: '100px'}}>
       {/* set horoscope */}
       <img src={horoscope} alt="horoscope" style={{ width:horoscopeSize.width, height:horoscopeSize.height}} />
       {/* set sun */}
-      <img src={sun} alt="sun" style={{width: '12px', height: 'auto', position: 'absolute', top: '${sunPosition.top}px', left: sunPosition.left, transform: 'translate(-50%, -50%)'}} />
+      <img src={sun} alt="sun" style={{width: '14px', height: 'auto', position: 'absolute', top: sunPosition.top, left:sunPosition.left, transform:sunPosition.transform}} />
 
       {/* set planets */}
       {imagesList.map((image, index) => (
-        <img key={index} src={image.src} alt={image.alt} style={{width: '12px', height: 'auto',position: 'absolute', top: planetsPosition[index].top, left: planetsPosition[index].left,transform: planetsPosition[index].transform }}/>
-      ))};
+        <img
+          key={index}
+          src={image.src}
+          alt={image.alt}
+          style={{
+            width: '12px',
+            height: 'auto',
+            position: 'absolute',
+            top: planetsPosition[index].top,
+            left: planetsPosition[index].left,
+            transform: planetsPosition[index].transform
+          }}
+        />
+      ))}
     </div>
   );
 }
