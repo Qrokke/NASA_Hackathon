@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import './App.css';
 
 
@@ -34,8 +35,18 @@ function Search() {
     setSelectedStarSystem('');
   };
 
+  const navigate = useNavigate();
+
+  const predict = (event) => {
+    navigate('/result');
+  }
+
   return (
     <div className="App">
+      <header className="header">
+        <h1>ROITs Horoscope</h1>
+      </header>
+
       <div className="container">
         {/* 左側に標準のホロスコープ画像を表示 */}
         <div className="horoscope">
@@ -138,11 +149,14 @@ function Search() {
                 </tr>
               </tbody>
             </table>
-            <button type="submit">占う</button>
+            <button onClick={predict}>Predict</button>
           </form>
           <div id="message">{message}</div>  {/* メッセージを表示 */}
         </div>
       </div>
+        <footer className="footer">
+          <p>&copy; 2024 ROITs。</p>
+        </footer>
     </div>
   );
 }

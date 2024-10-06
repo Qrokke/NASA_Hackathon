@@ -1,12 +1,12 @@
 /* App全体のスタイル */
 .App {
   font-family: Arial, sans-serif;
-  text-align: center;
   margin-top: 50px;
 }
 
 /* container: ホロスコープとフォームの配置 */
 .container {
+  margin: 30px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -77,4 +77,29 @@ button:hover {
 #message {
   margin-top: 20px;
   font-size: 18px;
+}
+
+.header {
+  background-color: #006c6c;
+  color: white;
+  padding: 20px 0;
+}
+
+.header h1 {
+  margin: 10px;
+}
+
+
+.footer {
+    background-color: #006c6c;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer p {
+    margin: 0;
 }
