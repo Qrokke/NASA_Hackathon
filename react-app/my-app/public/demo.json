@@ -1,13 +1,12 @@
 {
     "result": [
-        {
-            "name": "sun",
-            "rad": 0.1
-        },
-        {
-            "name": "jupiter",
-            "rad": 0.5
-        }
+        { "name": "sun", "rad": 0 },
+        { "name": "mercury", "rad": 30 },
+        { "name": "venus", "rad": 60 },
+        { "name": "earth", "rad": 90 },
+        { "name": "mars", "rad": 120 },
+        { "name": "jupiter", "rad": 150 },
+        { "name": "saturn", "rad": 180 }
     ],
     "description": "あなたの運勢は最高です！",
     "isError": false
