@@ -4,8 +4,6 @@ import './App.css';
 
 
 function Search() {
-
-  const navigate = useNavigate();
   const [name, setName] = useState('');  // 名前の状態を管理
   const [selectedYear, setSelectedYear] = useState('');  // 年の状態を管理
   const [selectedMonth, setSelectedMonth] = useState('');  // 月の状態を管理
@@ -13,6 +11,7 @@ function Search() {
   const [selectedStarSystem, setSelectedStarSystem] = useState('');  // 星系の状態を管理
   const [selectedPlanet, setSelectedPlanet] = useState('');  // 惑星の状態を管理
   const [message, setMessage] = useState('');  // メッセージの状態を管理
+  const navigate = useNavigate();
 
   const handleStarSystemChange = (e) => {
     setSelectedStarSystem(e.target.value);
@@ -47,7 +46,12 @@ function Search() {
     //   console.error('エラーが発生しました:', error);  // エラー処理
     // });
 
-    navigate('/result');
+    const queryString = new URLSearchParams({
+      selectedStarSystem,
+      selectedPlanet
+    }).toString();
+
+    navigate('/result?' + queryString);
   };
 
 
@@ -121,8 +125,8 @@ function Search() {
                       onChange={handleStarSystemChange}  // 星系の選択を管理
                     >
                       <option value="">星系を選んでください</option>
-                      <option value="トラピスト1">トラピスト1</option>
-                      <option value="太陽">太陽</option>
+                      <option value="trappist1">トラピスト1</option>
+                      <option value="sun">太陽</option>
                     </select>
                   </td>
                 </tr>
@@ -137,23 +141,24 @@ function Search() {
                       onChange={(e) => setSelectedPlanet(e.target.value)}  // 惑星の選択を管理
                     >
                       <option value="">惑星を選んでください</option>
-                      {selectedStarSystem === "トラピスト1" && (
+                      {selectedStarSystem === "trappist1" && (
                         <>
-                          <option value="惑星B">惑星B</option>
-                          <option value="惑星C">惑星C</option>
-                          <option value="惑星D">惑星D</option>
-                          <option value="惑星E">惑星E</option>
-                          <option value="惑星F">惑星F</option>
-                          <option value="惑星G">惑星G</option>
+                          <option value="0">TRAPPIST-1b</option>
+                          <option value="1">TRAPPIST-1c</option>
+                          <option value="2">TRAPPIST-1d</option>
+                          <option value="3">TRAPPIST-1e</option>
+                          <option value="4">TRAPPIST-1f</option>
+                          <option value="5">TRAPPIST-1g</option>
                         </>
                       )}
-                      {selectedStarSystem === "太陽" && (
+                      {selectedStarSystem === "sun" && (
                         <>
-                          <option value="水星">水星</option>
-                          <option value="地球">地球</option>
-                          <option value="火星">火星</option>
-                          <option value="木星">木星</option>
-                          <option value="土星">土星</option>
+                          <option value="0">Mercury</option>
+                          <option value="1">Venus</option>
+                          <option value="2">Earth</option>
+                          <option value="3">Mars</option>
+                          <option value="4">Jupiter</option>
+                          <option value="5">Saturn</option>
                         </>
                       )}
                     </select>
@@ -161,7 +166,7 @@ function Search() {
                 </tr>
               </tbody>
             </table>
-            <button>Predict</button>
+            <button>Find</button>
           </form>
           <div id="message">{message}</div>  {/* メッセージを表示 */}
         </div>
