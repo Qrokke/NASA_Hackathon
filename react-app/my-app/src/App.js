@@ -4,9 +4,6 @@ import './App.css';
 import horoscope from './images/horoscope.png';
 import sun from './images/sun.png';
 
-
-
-
 const solarsystemImages = [
   {src:require('./images/solarsystem/mercury.png'), alt: 'mercury'},
   {src:require('./images/solarsystem/venus.png'), alt: 'venus'},
@@ -66,6 +63,149 @@ const setPlanetsPosition = (centerIndex, angulerList) => {
     }
   });
 };
+
+const getStrongAspect = (angulerList, centerIndex) => {
+  const strongestAspect = {planet1:null, planet2:null}
+  const secondStrongestAspect = {planet1:null, planet2:null}
+
+  // Set aspect angle thresholds
+  const aspects = [
+    { name: "Conjunction", threshold: 8 },
+    { name: "Trine", threshold: 8 },
+    { name: "Sextile", threshold: 6 }
+  ];
+
+  angulerList.forEach((anguler1, index1) => {
+    angulerList.forEach((anguler2, index2) => {
+      if(index1 !== index2 && index1 !== centerIndex && index2 !== centerIndex) {
+        const aspect = Math.abs(anguler1 - anguler2);
+        const normalizedAspect = aspect > 180 ? 360 - aspect : aspect;
+
+        aspects.forEach(({ name, threshold }) => {
+          if (normalizedAspect <= threshold) {
+            if (strongestAspect.strength === null || normalizedAspect < strongestAspect.strength) {
+              secondStrongestAspect.planet1 = strongestAspect.planet1;
+              secondStrongestAspect.planet2 = strongestAspect.planet2;
+              secondStrongestAspect.strength = strongestAspect.strength;
+
+              strongestAspect.planet1 = index1;
+              strongestAspect.planet2 = index2;
+              strongestAspect.strength = normalizedAspect;
+            } else if (secondStrongestAspect.strength === null || normalizedAspect < secondStrongestAspect.strength) {
+              secondStrongestAspect.planet1 = index1;
+              secondStrongestAspect.planet2 = index2;
+              secondStrongestAspect.strength = normalizedAspect;
+            }
+          }
+        });
+      }
+    });
+  });
+
+  resultExplanation(strongestAspect, secondStrongestAspect);
+}
+
+const explanationList = [
+  {
+    planet: "sun",
+    traits: [
+      "Self and emotions align, leading to inner stability. You should be able to lead a calm family life.",
+      "Connection between self and intellect enhances independent thinking. You have the ability to organize and express your thoughts.",
+      "You are a highly attractive presence. You radiate a unique charm in relationships, finding greater happiness through deeper connections.",
+      "You can acquire your unique self in various environments. Your human richness expands through interaction with your surroundings.",
+      "You are a very energetic presence. Acting with confidence should allow you to achieve more challenging goals.",
+      "You are a person with great potential. Facing challenges without fear will lead you to a better future.",
+      "You are a very sincere person. If you patiently work through difficulties, you will gain strong trust and stability."
+    ]
+  },
+  {
+    planet: 0,
+    traits: [
+      "Intellect and emotions are connected. You can empathize with delicate feelings and engage in considerate conversations.",
+      "You are filled with love and emotions. You excel at building ideal relationships with partners based on genuine feelings.",
+      "You are skilled at understanding the feelings of those around you and maintaining emotional harmony between people. You have the talent to notice subtle emotional nuances and prevent conflicts.",
+      "You have strong motivation driven by emotions. Acting actively on your thoughts enriches your heart.",
+      "You are rich in emotions. Finding small happiness in your personal life can lead to a more fulfilling life.",
+      "You can maintain a strong sense of responsibility. It is important to be aware of what truly matters."
+    ]
+  },
+  {
+    planet: 1,
+    traits: [
+      "Intellect and charm are connected. Your rich sensitivity enhances communication in various settings.",
+      "You have improved understanding of natural sciences. Your strength lies in free thinking and ideas that go beyond boundaries.",
+      "You have strength in intellectual actions. Acting boldly in discussions can yield positive results.",
+      "You excel in intellectual growth. Pursuing knowledge with eagerness positively impacts your thinking.",
+      "Being intellectual makes you cautious. It’s important to take your time to think things through."
+    ]
+  },
+  {
+    planet: 2,
+    traits: [
+      "You are loved by various people. By spreading love, you can seek a happier life.",
+      "You possess a burning passion for aesthetics. In love, proactive engagement suits you well.",
+      "You excel in growth related to beauty. Having a high sensitivity to love and art leads to happiness through diverse interests.",
+      "You tend to seek realistic love. Nurturing relationships without haste will likely lead to happiness."
+    ]
+  },
+  {
+    planet: 3,
+    traits: [
+      "You can exert abundant passion on those around you, inspiring them and increasing productivity.",
+      "You are a person capable of engaging with the world and discovering new insights. If you release your energy outward, you can spread happiness to people all over the world.",
+      "You can empathize with others' sense of justice. By holding yourself accountable and imposing rules, you can maintain your environment for a long time."
+    ]
+  },
+  {
+    planet: 4,
+    traits: [
+      "You excel at transmitting motivation. Tasks you approach with enthusiasm are likely to attract help from those around you.",
+      "You are active while also being disciplined. Particularly, accumulating steady effort leads to success."
+    ]
+  },
+  {
+    planet: 5,
+    traits: [
+      "You excel at balancing idealism and realism. By making practical efforts, you can achieve ideal success and growth."
+    ]
+  }
+];
+
+const resultExplanation = (starSystem,strongAspect) => {
+  let strongExplanation = null;
+  
+  if(strongAspect.planet1 === 'sun') {
+
+    if(starSystem === 'sun') {
+      const index = solarsystemImages.findIndex(image => image.alt === strongAspect.planet2);
+
+      strongExplanation = explanationList[0].traits[index];;
+    }
+
+    if(starSystem === 'trappist1') {
+      const index = trappist1Images.findIndex(image => image.alt === strongAspect.planet2);
+
+      strongExplanation = explanationList[0].traits[index];;
+    }
+  }
+  else{
+    if(starSystem === 'sun') {
+      const index1 = solarsystemImages.findIndex(image => image.alt === strongAspect.planet1);
+      const index2 = solarsystemImages.findIndex(image => image.alt === strongAspect.planet2);
+
+      strongExplanation = explanationList[index1].traits[index2];
+    }
+
+    if(starSystem === 'trappist1') {
+      const index1 = trappist1Images.findIndex(image => image.alt === strongAspect.planet1);
+      const index2 = trappist1Images.findIndex(image => image.alt === strongAspect.planet2);
+
+      strongExplanation = explanationList[index1].traits[index2];
+    }
+  }
+  
+  return {strongExplanation};
+}
 
 function App() {
   const starSystem = 'sun';
