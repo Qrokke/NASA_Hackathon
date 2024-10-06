@@ -1,0 +1,14 @@
+{
+    "result": [
+        {
+            "name": "sun",
+            "rad": 0.1
+        },
+        {
+            "name": "jupiter",
+            "rad": 0.5
+        }
+    ],
+    "description": "あなたの運勢は最高です！",
+    "isError": false
+}

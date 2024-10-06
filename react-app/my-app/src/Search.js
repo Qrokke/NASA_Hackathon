@@ -4,6 +4,8 @@ import './App.css';
 
 
 function Search() {
+
+  const navigate = useNavigate();
   const [name, setName] = useState('');  // 名前の状態を管理
   const [selectedYear, setSelectedYear] = useState('');  // 年の状態を管理
   const [selectedMonth, setSelectedMonth] = useState('');  // 月の状態を管理
@@ -19,11 +21,12 @@ function Search() {
 
   const handleSubmit = (event) => {
     event.preventDefault();  // フォーム送信のデフォルト動作をキャンセル
+    let birthdate ='';
 
     if (name.trim() === "" || selectedYear === "" || selectedMonth === "" || selectedDay === "" || selectedPlanet === "") {
       setMessage("名前、生年月日、星座，惑星をすべて入力してください。");  // すべてのフィールドが必要
     } else {
-      const birthdate = `${selectedYear}-${selectedMonth}-${selectedDay}`;  // 生年月日を生成
+      birthdate = `${selectedYear}-${selectedMonth}-${selectedDay}`;  // 生年月日を生成
       setMessage(`こんにちは、${name}さん！あなたの生年月日は ${birthdate}、選択した惑星は ${selectedPlanet} ですね。`);
     }
 
@@ -33,13 +36,22 @@ function Search() {
     setSelectedDay('');
     setSelectedPlanet('');
     setSelectedStarSystem('');
+
+    console.log(name, birthdate, selectedPlanet);
+
+    // fetch(`https://2dkhkhbteycxfeou56oxyjhyty0yuvkx.lambda-url.us-east-2.on.aws?name=${name}&birthday=${birthdate}&starsytem=${selectedPlanet}`)  // APIのURLを指定
+    // .then(response => response.json())  // レスポンスをJSON形式に変換
+    // .then(data => {
+    // })
+    // .catch(error => {
+    //   console.error('エラーが発生しました:', error);  // エラー処理
+    // });
+
+    navigate('/result');
   };
 
-  const navigate = useNavigate();
 
-  const predict = (event) => {
-    navigate('/result');
-  }
+
 
   return (
     <div className="App">
@@ -149,7 +161,7 @@ function Search() {
                 </tr>
               </tbody>
             </table>
-            <button onClick={predict}>Predict</button>
+            <button>Predict</button>
           </form>
           <div id="message">{message}</div>  {/* メッセージを表示 */}
         </div>
