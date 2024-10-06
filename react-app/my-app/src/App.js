@@ -4,7 +4,8 @@ import './App.css';
 import horoscope from './images/horoscope.png';
 import sun from './images/sun.png';
 
-const initialPosition = 20;
+
+
 
 const solarsystemImages = [
   {src:require('./images/solarsystem/mercury.png'), alt: 'mercury'},
@@ -24,33 +25,39 @@ const trappist1Images = [
   {src:require('./images/trappist1/trappist1g.png'), alt: 'trappist1g'},
 ];
 
-const setSunPostion = (mode, realSunX, realSunY) => {
-  const sunRadians = Math.atan2(realSunX, realSunY);
-  const sunRadius = initialPosition + 17 * (2);
-  const sunX = sunRadius * Math.cos(sunRadians);
-  const sunY = sunRadius * Math.sin(sunRadians);
+const setSunPostion = (centerIndex, sunAnguler) => {
+  const initialAnguler = 150;
+  const initialPosition = 20;
+  
+  const totalAnguler = initialAnguler - sunAnguler;
+  const sunRadians = ( totalAnguler * Math.PI) / 180;
+  const sunRadius = initialPosition + 17 * centerIndex;
+  const x = sunRadius * Math.cos(sunRadians);
+  const y = sunRadius * Math.sin(sunRadians);
 
-  return {radians: sunRadians, top: `calc(50% + ${sunY}px)`, left: `calc(50% + ${sunX}px)`, transform: 'translate(-50%, -50%)'};
+  return {top:`calc(50% + ${y}px)`, left:`calc(50% + ${x}px)`, transform: `translate(-50%, -50%)`};
 }
 
-const setImagesList = (mode) => {
-    if(mode === 1) {
+const setImagesList = (starSystem) => {
+    if(starSystem === 'sun') {
       return solarsystemImages;
-    } else if(mode === 2) {
+    } else if(starSystem === 'trappist1') {
       return trappist1Images;
     }
 }
 
-const setPlanetsPosition = (mode, sunAnguler,angulerList) => {
-  const centerPlanetIndex = 2;
+const setPlanetsPosition = (centerIndex, angulerList) => {
+  const initialAnguler = 150;
+  const initialPosition = 20;
+
   return angulerList.map((anguler, index) => {
     const planetRadius = initialPosition + 17 * index;
 
-    if(index === centerPlanetIndex) {
+    if(index === centerIndex) {
       return {top:'50%', left: '50%', transform: `translate(-50%, -50%)`};
     }
     else{
-      const totalAnguler = anguler + sunAnguler;
+      const totalAnguler = initialAnguler - anguler;
       const sunRadians = (totalAnguler * Math.PI) / 180;
       const x = planetRadius * Math.cos(sunRadians);
       const y = planetRadius * Math.sin(sunRadians);
@@ -61,12 +68,13 @@ const setPlanetsPosition = (mode, sunAnguler,angulerList) => {
 };
 
 function App() {
-  const mode = 2;
+  const starSystem = 'sun';
+  const centerIndex = 2;
+  const sunAnguler = 0;
   const horoscopeSize = {width: '300px', height:'300px'};
-  const sunPosition = setSunPostion(mode,'0', '54');
-  const sunRadians  = sunPosition.radians;
-  const imagesList = setImagesList(mode);
-  const planetsPosition = setPlanetsPosition(mode, sunRadians,[0, 45, 90, 135, 180, 225]);
+  const sunPosition = setSunPostion(centerIndex, sunAnguler);
+  const imagesList = setImagesList(starSystem);
+  const planetsPosition = setPlanetsPosition(centerIndex, [0, 45, 90, 135, 180, 225]);
 
   return (
     <div style={{position:'relative', width:horoscopeSize.width, height:horoscopeSize.height, top: '100px', left: '100px'}}>
